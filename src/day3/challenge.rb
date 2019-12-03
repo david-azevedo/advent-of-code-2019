@@ -49,7 +49,7 @@ def calc_manhattan(pos)
   pos[0].abs + pos[1].abs
 end
 
-def get_number_of_steps(pos, wire)
+def get_steps(pos, wire)
   steps = 0
 
   wire.each do |p|
@@ -66,6 +66,9 @@ paths = wires.map { |wire| wire_to_path(wire.split(',')) }
 
 intersections = paths.reduce(:&)
 
-steps_sum = intersections.map { |intersect| get_number_of_steps(intersect, paths[0]) + get_number_of_steps(intersect, paths[1])}
+steps_sum = intersections.map do |point|
+  get_steps(point, paths[0]) + get_steps(point, paths[1])
+end
 
+# Correct answer: 37390
 puts steps_sum.min
