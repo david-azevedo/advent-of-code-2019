@@ -8,7 +8,7 @@ def recursive_fuel(fuel)
     recursive_fuel(needed_fuel) + needed_fuel
 end
 
-values = File.readlines('../../data/marco.txt')
+values = File.readlines('../data/marco.txt')
 
 fuel_values = values.map { |value| calc_fuel(value.to_i) + recursive_fuel(calc_fuel(value.to_i)) }
 

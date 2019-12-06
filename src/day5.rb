@@ -45,7 +45,7 @@ def equals(code, arr, pos1, pos2, pos3)
 end
 
 def reset_memory
-  File.read('../../data/day5.txt').split(',').map(&:to_i)
+  File.read('../data/day5.txt').split(',').map(&:to_i)
 end
 
 # Change this to regular for loop

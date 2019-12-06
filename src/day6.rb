@@ -1,4 +1,4 @@
-values = File.readlines('../../data/day6.txt')
+values = File.readlines('../data/day6.txt')
 
 $planets_to_orbits = {}
 

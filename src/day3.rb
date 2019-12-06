@@ -60,7 +60,7 @@ def get_steps(pos, wire)
   steps
 end
 
-wires = File.readlines('../../data/day3.txt')
+wires = File.readlines('../data/day3.txt')
 
 paths = wires.map { |wire| wire_to_path(wire.split(',')) }
 

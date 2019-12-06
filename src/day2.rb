@@ -7,7 +7,7 @@ def multiply(arr, pos1, pos2, pos3)
 end
 
 def reset_memory
-  File.read('../../data/day2.txt').split(',').map(&:to_i)
+  File.read('../data/day2.txt').split(',').map(&:to_i)
 end
 
 # Part 2

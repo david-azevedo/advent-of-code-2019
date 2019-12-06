@@ -6,7 +6,7 @@ require 'rgl/dot'
 graph = RGL::DirectedAdjacencyGraph.new
 
 
-values = File.readlines('../../data/day6.txt')
+values = File.readlines('../data/day6.txt')
 edge_weights = {}
 
 values.each do |value|
