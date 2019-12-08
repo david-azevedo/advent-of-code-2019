@@ -1,49 +1,43 @@
-require 'colorize'
-
 pixels = File.read('../data/day8.txt')
 
-# 150 = 25 * 6
-
-number_of_zeros = 150
+width = 25
+height = 6
+number_of_zeros = width * height
 number_of_ones = 0
 number_of_twos = 0
 
-layers = pixels.scan(/.{150}/)
+layers = pixels.scan(/.{#{Regexp.quote(number_of_zeros.to_s)}}/)
 
 layers.each do |layer|
   zeros = layer.count('0')
-  if zeros < number_of_zeros
-    number_of_zeros = zeros
-    number_of_ones = layer.count('1')
-    number_of_twos = layer.count('2')
-  end
+
+  next unless zeros < number_of_zeros
+
+  number_of_zeros = zeros
+  number_of_ones = layer.count('1')
+  number_of_twos = layer.count('2')
 end
 
 # PART 1
-
-puts (number_of_ones * number_of_twos)
+puts number_of_ones * number_of_twos
 
 # PART 2
-width = 25
-height = 6
-image = Array.new(height){Array.new(width,'2')}
+image = Array.new(height) { Array.new(width, '2') }
 
-layers.each_with_index do |layer, index|
-  for h in height.times
-    for w in width.times
-      if image[h][w] == '2'
-        image[h][w] = layer[h * width + w]
-      end
+layers.each do |layer|
+  height.times.each do |h|
+    width.times.each do |w|
+      image[h][w] = layer[h * width + w] if image[h][w] == '2'
     end
   end
 end
 
 image.join('').scan(/.{25}/).each do |row|
-  for digit in row.split('')
+  row.split('').each do |digit|
     if digit == '1'
-      print 'X'.white
+      print 'X'
     else
-      print 'X'.black
+      print ' '
     end
   end
   puts ''
