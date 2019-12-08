@@ -101,27 +101,17 @@ def compute(array, amp_index)
       return 'finished'
     end
   end
-
-  $instruction_pointers[amp_index] = index
-  array
 end
 
-permutations = [5, 6, 7, 8, 9].permutation.to_a
-$memory = []
-$instruction_pointers = [0, 0, 0, 0, 0]
-$input = 0
-$phase = 0
-$is_first_input = true
-$first_round_done = false
-max_output = 0
-
-def reset_globals()
-  $input = 0
-  $first_round_done = false
+def reset_globals
   $memory = []
   $instruction_pointers = [0, 0, 0, 0, 0]
+  $input = 0
+  $first_round_done = false
 end
 
+max_output = 0
+permutations = [5, 6, 7, 8, 9].permutation.to_a
 
 permutations.each do |permutation|
   finished = false
