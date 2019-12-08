@@ -11,9 +11,13 @@ def multiply(code, arr, pos1, pos2, pos3)
 end
 
 def consume_input(arr, pos1)
-  if $is_first_input
-    arr[pos1] = $phase
-    $is_first_input = false
+  if !$first_round_done
+    if $is_first_input
+      arr[pos1] = $phase
+      $is_first_input = false
+    else
+      arr[pos1] = $input
+    end
   else
     arr[pos1] = $input
   end
@@ -54,8 +58,10 @@ def reset_memory
 end
 
 # Change this to regular for loop
-def compute(array)
-  index = 0
+def compute(array, amp_index)
+
+  return array unless array != 'finished'
+  index = $instruction_pointers[amp_index]
   while index < array.length
     code = array[index]
     instruction = code % 100
@@ -74,6 +80,8 @@ def compute(array)
       # Output
       write_input(array, array[index + 1])
       index += 2
+      $instruction_pointers[amp_index] = index
+      return array
     when 5
       bool, new_index = jump_if_true(code, array, array[index + 1], array[index + 2])
 
@@ -89,26 +97,53 @@ def compute(array)
       equals(code, array, array[index + 1], array[index + 2], array[index + 3])
       index += 4
     when 99
-      break
+      $instruction_pointers[amp_index] = array.length
+      return 'finished'
     end
-  end 
+  end
 
-  # array[0]
+  $instruction_pointers[amp_index] = index
+  array
 end
 
 permutations = [5, 6, 7, 8, 9].permutation.to_a
+$memory = []
+$instruction_pointers = [0, 0, 0, 0, 0]
 $input = 0
 $phase = 0
 $is_first_input = true
+$first_round_done = false
 max_output = 0
 
-permutations.each do |permutation|
+def reset_globals()
   $input = 0
-  permutation.each do |phase_setting|
-    $phase = phase_setting
-    $is_first_input = true
-    array = reset_memory
-    compute(array)
+  $first_round_done = false
+  $memory = []
+  $instruction_pointers = [0, 0, 0, 0, 0]
+end
+
+
+permutations.each do |permutation|
+  finished = false
+  round = 0
+  reset_globals
+
+  while !finished do
+    round += 1
+    
+    permutation.each_with_index do |phase_setting, index|
+      $phase = phase_setting
+      $is_first_input = true
+      result = compute($memory[index] || reset_memory, index)
+      if index == 4 && result == 'finished'
+        finished = true
+      end
+      $memory[index] = result
+    end
+
+    if round == 1
+      $first_round_done = true
+    end
   end
 
   max_output = $input unless $input < max_output
