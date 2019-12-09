@@ -1,35 +1,31 @@
 def add(code, arr, pos1, pos2, pos3)
   val_1 = convert_mode(code / 100 % 10, arr, pos1)
   val_2 = convert_mode(code / 1000 % 10, arr, pos2)
-  val_3 = convert_mode(code / 10_000 % 10, arr, pos3)
+  val_3 = convert_literal(code / 10_000 % 10, arr, pos3)
 
-  arr[val_3.abs] = val_1 + val_2
+
+  arr[val_3] = val_1 + val_2 if val_3 >= 0
 end
 
 def multiply(code, arr, pos1, pos2, pos3)
   val_1 = convert_mode(code / 100 % 10, arr, pos1)
   val_2 = convert_mode(code / 1000 % 10, arr, pos2)
-  val_3 = convert_mode(code / 10_000 % 10, arr, pos3)
+  val_3 = convert_literal(code / 10_000 % 10, arr, pos3)
 
-  arr[val_3.abs] = val_1 * val_2
+  arr[val_3] = val_1 * val_2 if val_3 >= 0
 end
 
 def consume_input(code, arr, pos1)
-  val_1 = convert_mode(code / 100 % 10, arr, pos1)
+  val_1 = convert_literal(code / 100 % 10, arr, pos1)
   
-  arr[val_1.abs] = $input
+  puts "Input: #{$input}"
+  arr[val_1] = $input
 end
 
 def write_to_output(code, arr, pos1)
   val_1 = convert_mode(code / 100 % 10, arr, pos1)
   
-  mode = code / 100 % 10
-
-  if mode == 1
-    $input = val_1
-  else
-    $input = arr[val_1.abs] || 0
-  end
+  $input = val_1
   puts "output: #{$input}"
 end
 
@@ -48,41 +44,45 @@ end
 def less_than(code, arr, pos1, pos2, pos3)
   val_1 = convert_mode(code / 100 % 10, arr, pos1)
   val_2 = convert_mode(code / 1000 % 10, arr, pos2)
-  val_3 = convert_mode(code / 10_000 % 10, arr, pos3)
+  val_3 = convert_literal(code / 10_000 % 10, arr, pos3)
 
-  arr[val_3.abs] = val_1 < val_2 ? 1 : 0
+  arr[val_3] = val_1 < val_2 ? 1 : 0 if val_3 >= 0
 end
 
 def equals(code, arr, pos1, pos2, pos3)
   val_1 = convert_mode(code / 100 % 10, arr, pos1)
   val_2 = convert_mode(code / 1000 % 10, arr, pos2)
-  val_3 = convert_mode(code / 10_000 % 10, arr, pos3)
+  val_3 = convert_literal(code / 10_000 % 10, arr, pos3)
 
-  arr[val_3.abs] = val_1 == val_2 ? 1 : 0
+  arr[val_3] = val_1 == val_2 ? 1 : 0 if val_3 >= 0
 end
 
 def add_to_relative_base(code, arr, pos1)
   val_1 = convert_mode(code / 100 % 10, arr, pos1)
 
-  mode = code / 100 % 10
-  if mode == 1
-    $relative_base += val_1
-  else
-    $relative_base += arr[val_1.abs] || 0
-  end
+  $relative_base += val_1
 end
 
 
 def convert_mode(mode, arr, pos)
   case mode
   when 0
-    arr[pos.abs] || 0
+    arr[pos] || 0 if pos >= 0
   when 1
     pos
   when 2
-    arr[($relative_base + pos).abs] || 0
-  else
-    puts 'Ooops'
+    arr[$relative_base + pos] || 0 if $relative_base + pos >= 0
+  end
+end
+
+def convert_literal(mode, arr, pos)
+  case mode
+  when 0
+    pos
+  when 1
+    pos
+  when 2
+    $relative_base + pos
   end
 end
 
@@ -97,6 +97,7 @@ def compute(array)
   while index < array.length
     code = array[index]
     instruction = code % 100
+
     #puts "instruction: #{instruction}"
     #puts "array: #{array.join(',')}"
     case instruction
@@ -140,7 +141,7 @@ def compute(array)
 end
 
 def reset_globals
-  $input = 1
+  $input = 2
   $relative_base = 0
 end
 
@@ -149,5 +150,6 @@ arrays = reset_memory
 arrays.each_with_index do |array, index|
   reset_globals
   puts "Input ##{index}"
-  compute(array.split(',').map(&:to_i))
+  array_int = array.split(',').map(&:to_i)
+  compute(array_int)
 end
