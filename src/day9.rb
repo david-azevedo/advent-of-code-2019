@@ -135,7 +135,7 @@ def compute(array)
 end
 
 def reset_globals
-  $input = 1
+  $input = 2
   $relative_base = 0
 end
 
