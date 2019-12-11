@@ -187,11 +187,9 @@ reset_globals
 array = reset_memory
 compute(array)
 
-canvas = x = Array.new(50) { Array.new(50,0) }
+canvas = x = Array.new(6) { Array.new(45,0) }
 $paint.each do |pos, paint|
-  canvas[pos[0]][pos[1]] = paint
+  canvas[pos[1]][pos[0]] = paint
 end
 
-canvas.map { |line| puts line.join(',').gsub('1','#').gsub('0',' ')}
-puts $paint.inspect
-puts $unique_pos.uniq.length
+canvas.map { |line| puts line.join('').gsub('1','#').gsub('0',' ')}
