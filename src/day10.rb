@@ -48,30 +48,48 @@ def get_vector(cur_x, x_i, cur_y, y_i)
   [dx, dy]
 end
 
-def remove_first_different(arr, previous, index)
-  
-  # TODO debug this function
-  return unless arr
-  if previous.nil?
-    value = Vector[arr[0][0], arr[0][1]].angle_with(Vector[0, -1])
-    drop = arr.shift
-    $asteroids.push(drop)
-    return [arr, value, 0]
-  end
+def destroy_asteroids(arr)
 
-  index = 0 if index == arr.length
-  while index < arr.length
+  destroyed = []
+  previous = nil
+  index = 0
+  count = 0
+  while arr
+    #puts arr.inspect
+    #puts previous
+    if index == arr.length
+      index = 0
+    end
+
+    if count == 200
+      puts destroyed.inspect
+    end
+
+    if previous.nil?
+      previous = Vector[arr[0][0], arr[0][1]].angle_with(Vector[0, -1])
+      drop = arr.shift
+      destroyed.push(drop)
+      count += 1
+      next
+    end
+
+    if index == arr.length
+      index = 0
+    end
     d = arr[index]
     v = Vector[d[0], d[1]].angle_with(Vector[0, -1])
 
     if v != previous
-      $asteroids.push(d)
+      previous = v
+      destroyed.push(d)
       arr.delete_at(index)
-      return [arr, v, index]
+      count += 1
+      next
     else
       index += 1
     end
   end
+  destroyed
 end
 
 map = File.readlines('../data/day10.txt').map(&:strip).map(&:chars)
@@ -113,27 +131,18 @@ directions = directions.sort_by do |d|
   [ang,dist]
 end
 
-#puts directions.join(',')
-directions[0..15].map { |d| puts "#{d[0] + best_pos[0]}, #{d[1] + best_pos[1]}"}
-$asteroids = []
-prev_directions = directions.clone
+# puts directions.join(',')
+puts directions.map { |d| [d[1] + best_pos[1], d[0] + best_pos[0]] }.inspect
 
-c = 0
-previous_angle = nil
-index = 0
-while c < prev_directions.length
+# asteroids = destroy_asteroids(directions)
 
-  c += 1
-  directions, previous_angle, index = remove_first_different(directions, previous_angle, index)
-end
-
-$asteroids = $asteroids.map { |a| [a[0] + best_pos[0], a[1] + best_pos[1]]}
+# asteroids = asteroids.map { |a| [a[0] + best_pos[0], a[1] + best_pos[1]]}
 
 puts '------------'
-puts $asteroids.length
-puts $asteroids.uniq.length
-$asteroids[0..11].map { |d| puts d.join(',') }
-puts $asteroids[199].inspect
+#puts asteroids.length
+#puts asteroids.uniq.length
+#asteroids[0..11].map { |d| puts d.join(',') }
+#puts asteroids[199].inspect
 #new_directions, previous_angle = remove_first_different(prev_directions, previous_angle)
 
 #destroy_200 = (prev_directions - new_directions)[0]
