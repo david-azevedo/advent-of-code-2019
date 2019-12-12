@@ -55,13 +55,12 @@ def destroy_asteroids(arr)
   index = 0
   count = 0
   while arr
-    #puts arr.inspect
-    #puts previous
     if index == arr.length
       index = 0
     end
 
     if count == 200
+      puts 'NUMBER 200'
       puts destroyed.inspect
     end
 
@@ -128,27 +127,12 @@ directions = directions.sort_by do |d|
   else
     ang = Vector[d[0], d[1]].angle_with(Vector[0, -1])
   end
-  [ang,dist]
+  [ang, dist]
 end
 
 # puts directions.join(',')
 puts directions.map { |d| [d[1] + best_pos[1], d[0] + best_pos[0]] }.inspect
 
-# asteroids = destroy_asteroids(directions)
+asteroids = destroy_asteroids(directions)
 
-# asteroids = asteroids.map { |a| [a[0] + best_pos[0], a[1] + best_pos[1]]}
-
-puts '------------'
-#puts asteroids.length
-#puts asteroids.uniq.length
-#asteroids[0..11].map { |d| puts d.join(',') }
-#puts asteroids[199].inspect
-#new_directions, previous_angle = remove_first_different(prev_directions, previous_angle)
-
-#destroy_200 = (prev_directions - new_directions)[0]
-#destroy_200[0] += best_pos[0]
-#destroy_200[1] += best_pos[1]
-#puts "(#{destroy_200[0]},#{destroy_200[1]})"
-
-#calc = destroy_200[0] * 100 + destroy_200[1]
-#puts "Destroy (#{destroy_200[0]},#{destroy_200[1]}), 100X + Y = #{calc}"
+asteroids = asteroids.map { |a| [a[0] + best_pos[0], a[1] + best_pos[1]]}
