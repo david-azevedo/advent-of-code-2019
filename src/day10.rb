@@ -53,28 +53,20 @@ def destroy_asteroids(arr)
   destroyed = []
   previous = nil
   index = 0
-  count = 0
-  while arr
+
+  while arr.length != 0
     if index == arr.length
       index = 0
-    end
-
-    if count == 200
-      puts 'NUMBER 200'
-      puts destroyed.inspect
+      previous = nil
     end
 
     if previous.nil?
       previous = Vector[arr[0][0], arr[0][1]].angle_with(Vector[0, -1])
       drop = arr.shift
       destroyed.push(drop)
-      count += 1
       next
     end
 
-    if index == arr.length
-      index = 0
-    end
     d = arr[index]
     v = Vector[d[0], d[1]].angle_with(Vector[0, -1])
 
@@ -82,7 +74,6 @@ def destroy_asteroids(arr)
       previous = v
       destroyed.push(d)
       arr.delete_at(index)
-      count += 1
       next
     else
       index += 1
@@ -118,21 +109,30 @@ puts "(#{best_pos[0]},#{best_pos[1]}), can see: #{most_visible}"
 directions = get_directions(map, height, width, best_pos[0], best_pos[1])
 
 # Sort by angle and then by distance
-directions = directions.sort_by do |d| 
-  # dist = Math.sqrt(d[0]**2 + d[1]**2)
+directions = directions.sort_by do |d|
   dist = d[0].abs + d[1].abs
-  # puts "d[0]: #{d[0]}, best_pos[0]: #{best_pos[0]}"
-  if d[0] < 0 && 
-    ang = Vector[d[0], d[1]].angle_with(Vector[0, -1]) + Math::PI
+  
+  if (d[0]).negative?
+    ang = (2 * Math::PI) - Vector[d[0], d[1]].angle_with(Vector[0, -1])
   else
     ang = Vector[d[0], d[1]].angle_with(Vector[0, -1])
   end
   [ang, dist]
 end
 
-# puts directions.join(',')
-puts directions.map { |d| [d[1] + best_pos[1], d[0] + best_pos[0]] }.inspect
+# puts directions.map { |d| [d[0] + best_pos[0], d[1] + best_pos[1]] }.inspect
 
 asteroids = destroy_asteroids(directions)
 
 asteroids = asteroids.map { |a| [a[0] + best_pos[0], a[1] + best_pos[1]]}
+
+puts asteroids[0].inspect
+puts asteroids[1].inspect
+puts asteroids[2].inspect
+puts asteroids[9].inspect
+puts asteroids[19].inspect
+puts asteroids[49].inspect
+puts asteroids[99].inspect
+puts asteroids[199].inspect
+puts asteroids[200].inspect
+puts asteroids[298].inspect

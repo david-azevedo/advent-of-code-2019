@@ -2,7 +2,7 @@ class Moon
   attr_reader :x
   attr_reader :y
   attr_reader :z
-  
+
   def initialize(x, y, z)
     @x = x
     @y = y
