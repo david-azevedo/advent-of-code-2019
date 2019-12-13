@@ -17,14 +17,27 @@ end
 def consume_input(code, arr, pos1)
   val_1 = convert_literal(code / 100 % 10, pos1)
 
-  arr[val_1] = $input
+  draw_tile
+  # input = gets.chomp.to_i
+  input = get_move
+  arr[val_1] = input
 end
 
 def write_to_output(code, arr, pos1)
   val_1 = convert_mode(code / 100 % 10, arr, pos1)
 
-  $input = val_1
+  # $input = val_1
   $output.push(val_1)
+  if $output.length == 3
+    if $output[0] == -1 && $output[1] == 0 # New Score
+      $score = $output[2]
+      puts "New Score: #{$score}"
+    else
+      $tile[[$output[0], $output[1]]] = $output[2]
+    end
+
+    $output = []
+  end
 end
 
 def jump_if_true(code, arr, pos1, pos2)
@@ -135,13 +148,46 @@ def compute(array)
 end
 
 def reset_globals
-  $input = 0
   $relative_base = 0
+end
+
+def get_move
+  ball_x = 0
+  player_x = 0
+  $tile.each do |pos, paint|
+    if paint == 3
+      player_x = pos[0]
+    end
+    if paint == 4
+      ball_x = pos[0]
+    end
+  end
+
+  return 0 if ball_x == player_x
+  return 1 if ball_x > player_x
+  -1
+end
+
+def draw_tile
+  #puts $tile.inspect
+  count = 0
+  canvas = x = Array.new(22) { Array.new(40,0) }
+  $tile.each do |pos, paint|
+    canvas[pos[1]][pos[0]] = paint
+    if paint == 2
+      count += 1
+    end
+  end
+  
+  canvas.map { |line| puts line.join('').gsub('1','#').gsub('0',' ').gsub('2','O').gsub('3','_').gsub('4','o')}
+  #sleep 0.05
 end
 
 reset_globals
 array = reset_memory
 $output = []
+$score = 0
+$tile = {}
 compute(array)
 
 positions = {}
@@ -149,4 +195,4 @@ $output.each_slice(3) do |values|
   positions[[values[0], values[1]]] = values[2]
 end
 
-puts positions.values.count(2)
+puts positions[[-1, 0]]
