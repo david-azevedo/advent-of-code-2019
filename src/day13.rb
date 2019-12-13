@@ -31,7 +31,7 @@ def write_to_output(code, arr, pos1)
   if $output.length == 3
     if $output[0] == -1 && $output[1] == 0 # New Score
       $score = $output[2]
-      puts "New Score: #{$score}"
+      # puts "New Score: #{$score}"
     else
       $tile[[$output[0], $output[1]]] = $output[2]
     end
@@ -180,7 +180,7 @@ def draw_tile
   end
   
   canvas.map { |line| puts line.join('').gsub('1','#').gsub('0',' ').gsub('2','O').gsub('3','_').gsub('4','o')}
-  #sleep 0.05
+  sleep 0.02
 end
 
 reset_globals
@@ -190,9 +190,5 @@ $score = 0
 $tile = {}
 compute(array)
 
-positions = {}
-$output.each_slice(3) do |values|
-  positions[[values[0], values[1]]] = values[2]
-end
 
-puts positions[[-1, 0]]
+puts "Congratulations you won! Score: #{$score}"
