@@ -180,7 +180,7 @@ def draw_tile
   end
   
   canvas.map { |line| puts line.join('').gsub('1','#').gsub('0',' ').gsub('2','O').gsub('3','_').gsub('4','o')}
-  sleep 0.02
+  sleep 0.01
 end
 
 reset_globals
